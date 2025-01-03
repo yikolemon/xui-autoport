@@ -4,6 +4,7 @@ import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.setting.dialect.Props;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -24,19 +25,14 @@ public class PortRunnable implements Runnable{
 
     private Integer count = 0;
 
-    private static final Properties P = new Properties();
+    private static final Properties P;
 
     static {
-        // 获取当前类所在的 JAR 文件路径
-        Properties properties = loadOutterProperties();
-        P.putAll(properties);
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream resource = classLoader.getResourceAsStream("application.properties");
-        try {
-            P.load(resource);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        P = loadOutterProperties();
+        assert P != null;
+        P.forEach((a, b)->{
+            System.out.println("key:" + a +" ,value:" + b);
+        });
     }
 
     @Override
@@ -155,7 +151,7 @@ public class PortRunnable implements Runnable{
                 System.out.println("配置文件路径: " + propertiesFile.getAbsolutePath());
 
                 // 使用 Hutool 的 PropertiesUtil 读取配置文件
-                return PropertiesUtils.toProperties(propertiesFile);
+                return new Props(propertiesFile);
             } else {
                 System.out.println("配置文件不存在");
             }

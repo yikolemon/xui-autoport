@@ -6,7 +6,6 @@ import cn.hutool.cron.CronUtil;
 public class Main {
 
     public static void main(String[] args) {
-        // 设置 Cron 表达式，表示每天凌晨 4 点执行任务
         // 秒 分 时 日 月 周年
         String cronExpression = "0 0 4 * * ?";
         // 设置任务执行逻辑
